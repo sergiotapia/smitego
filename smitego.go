@@ -57,6 +57,65 @@ type Player struct {
 	Ret_msg             string
 }
 
+type MatchPlayer struct {
+	Account_level        int
+	Activeid1            int
+	Activeid2            int
+	Assists              int
+	Ban1                 int
+	Ban1Id               int
+	Ban2                 int
+	Ban2Id               int
+	Damage_bot           int
+	Damage_done_magical  int
+	Damage_done_physical int
+	Damage_player        int
+	Damage_taken         int
+	Deaths               int
+	Entry_datetime       string
+	Final_match_level    int
+	Godid                int
+	Gold_earned          int
+	Gold_per_minute      int
+	Healing              int
+	Itemid1              int
+	Itemid2              int
+	Itemid3              int
+	Itemid4              int
+	Itemid5              int
+	Itemid6              int
+	Item_active_1        string
+	Item_active_2        string
+	Item_active_3        string
+	Item_purch_1         string
+	Item_purch_2         string
+	Item_purch_3         string
+	Item_purch_4         string
+	Item_purch_5         string
+	Item_purch_6         string
+	Killing_spree        int
+	Kills_bot            int
+	Kills_player         int
+	Master_level         int
+	Match                int
+	Minutes              int
+	Multi_kill_max       int
+	Partyid              int
+	Reference_name       string
+	Skin                 string
+	Skinid               int
+	Structure_damage     int
+	Surrendered          int
+	Team1score           int
+	Team2score           int
+	Teamid               int
+	Team_name            string
+	Win_status           string
+	Name                 string
+	Playername           string
+	Ret_msg              string
+}
+
 func GetPlayer(playerName string) Player {
 	timestamp := time.Now().UTC().Format("20060102150405")
 	hash := GetMD5Hash(DevId + "getplayer" + AuthKey + timestamp)
@@ -147,8 +206,7 @@ func GetTopRanked(queueId int) string {
 	return ""
 }
 
-//TO-DO: Parse into actual struct type.
-func GetMatchDetails(matchId string) string {
+func GetMatchDetails(matchId string) []MatchPlayer {
 	timestamp := time.Now().UTC().Format("20060102150405")
 	hash := GetMD5Hash(DevId + "getmatchdetails" + AuthKey + timestamp)
 	url := "http://api.smitegame.com/smiteapi.svc/getmatchdetailsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/" + matchId
@@ -162,9 +220,12 @@ func GetMatchDetails(matchId string) string {
 		if err != nil {
 			Perror(err)
 		} else {
-			return string(contents)
+			var matchPlayers []MatchPlayer
+			json.Unmarshal(contents, &matchPlayers)
+			return matchPlayers
 		}
 	}
 
-	return ""
+	matchPlayers := []MatchPlayer{}
+	return matchPlayers
 }
