@@ -2,7 +2,6 @@ package smitego
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -151,6 +150,18 @@ type MatchHistory struct {
 	Ret_msg        string
 }
 
+type DevApiDataUsed struct {
+	Active_sessions      int
+	Concurrent_sessions  int
+	Request_limit_daily  int
+	Session_cap          int
+	Session_time_limit   int
+	Total_requests_today int
+	Total_sessions_today int
+	Ret_msg              string
+}
+
+// Returns ping information for the Smite API endpoint server.
 func Ping() string {
 	url := "http://api.smitegame.com/smiteapi.svc/pingJson"
 
@@ -169,6 +180,32 @@ func Ping() string {
 	return "Ping service not available."
 }
 
+// Returns data for your Dev API account. Counts active
+// sessions, concurrent sessions, request_limit, et al.
+func GetDataUsed() DevApiDataUsed {
+	timestamp := time.Now().UTC().Format("20060102150405")
+	hash := GetMD5Hash(DevId + "getdataused" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/getdatausedJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp
+
+	response, err := http.Get(url)
+	if err != nil {
+		Perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			Perror(err)
+		} else {
+			var dataUsed []DevApiDataUsed
+			json.Unmarshal(contents, &dataUsed)
+			return dataUsed[0]
+		}
+	}
+
+	dataUsed := DevApiDataUsed{Ret_msg: "Not found"}
+	return dataUsed
+}
+
 func GetPlayer(playerName string) Player {
 	timestamp := time.Now().UTC().Format("20060102150405")
 	hash := GetMD5Hash(DevId + "getplayer" + AuthKey + timestamp)
@@ -185,7 +222,6 @@ func GetPlayer(playerName string) Player {
 		} else {
 			var players []Player
 			json.Unmarshal(contents, &players)
-			fmt.Println(string(contents))
 			return players[0]
 		}
 	}
