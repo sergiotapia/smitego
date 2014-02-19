@@ -151,6 +151,24 @@ type MatchHistory struct {
 	Ret_msg        string
 }
 
+func Ping() string {
+	url := "http://api.smitegame.com/smiteapi.svc/pingJson"
+
+	response, err := http.Get(url)
+	if err != nil {
+		Perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			Perror(err)
+		} else {
+			return string(contents[:])
+		}
+	}
+	return "Ping service not available."
+}
+
 func GetPlayer(playerName string) Player {
 	timestamp := time.Now().UTC().Format("20060102150405")
 	hash := GetMD5Hash(DevId + "getplayer" + AuthKey + timestamp)
