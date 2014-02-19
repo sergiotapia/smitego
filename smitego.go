@@ -161,6 +161,11 @@ type DevApiDataUsed struct {
 	Ret_msg              string
 }
 
+type Friend struct {
+	Name    string
+	Ret_msg string
+}
+
 // Returns ping information for the Smite API endpoint server.
 func Ping() string {
 	url := "http://api.smitegame.com/smiteapi.svc/pingJson"
@@ -204,6 +209,31 @@ func GetDataUsed() DevApiDataUsed {
 
 	dataUsed := DevApiDataUsed{Ret_msg: "Not found"}
 	return dataUsed
+}
+
+// Returns a collection of Player names that are friends with
+// playerName sent.
+func GetFriends(playerName string) []Friend {
+	timestamp := time.Now().UTC().Format("20060102150405")
+	hash := GetMD5Hash(DevId + "getfriends" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/getfriendsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/" + playerName
+
+	response, err := http.Get(url)
+	if err != nil {
+		Perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			Perror(err)
+		} else {
+			var friends []Friend
+			json.Unmarshal(contents, &friends)
+			return friends
+		}
+	}
+	friends := []Friend{}
+	return friends
 }
 
 func GetPlayer(playerName string) Player {
