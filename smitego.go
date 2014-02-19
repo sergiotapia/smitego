@@ -176,11 +176,10 @@ func GetPlayer(playerName string) Player {
 	return player
 }
 
-//TO-DO: Service Endpoint not found.
 func GetGods() string {
 	timestamp := time.Now().UTC().Format("20060102150405")
 	hash := GetMD5Hash(DevId + "getgods" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getgodsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp
+	url := "http://api.smitegame.com/smiteapi.svc/getgodsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/1"
 
 	response, err := http.Get(url)
 	if err != nil {
