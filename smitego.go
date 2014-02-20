@@ -166,6 +166,13 @@ type Friend struct {
 	Ret_msg string
 }
 
+type GodRank struct {
+	Rank        int
+	Worshippers int
+	God         string
+	Ret_msg     string
+}
+
 // Returns ping information for the Smite API endpoint server.
 func Ping() string {
 	url := "http://api.smitegame.com/smiteapi.svc/pingJson"
@@ -234,6 +241,31 @@ func GetFriends(playerName string) []Friend {
 	}
 	friends := []Friend{}
 	return friends
+}
+
+// Returns a collection of rankings/worshippers a user
+// has for each God ordered from highest ranked to lowest ranked.
+func GetGodRanks(playerName string) []GodRank {
+	timestamp := time.Now().UTC().Format("20060102150405")
+	hash := GetMD5Hash(DevId + "getgodranks" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/getgodranksJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/" + playerName
+
+	response, err := http.Get(url)
+	if err != nil {
+		Perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			Perror(err)
+		} else {
+			var godRanks []GodRank
+			json.Unmarshal(contents, &godRanks)
+			return godRanks
+		}
+	}
+	godRanks := []GodRank{}
+	return godRanks
 }
 
 func GetPlayer(playerName string) Player {
