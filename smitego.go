@@ -173,6 +173,161 @@ type GodRank struct {
 	Ret_msg     string
 }
 
+type God struct {
+	Ability1                      string
+	Ability2                      string
+	Ability3                      string
+	Ability4                      string
+	Ability5                      string
+	AbilityId1                    int
+	AbilityId2                    int
+	AbilityId3                    int
+	AbilityId4                    int
+	AbilityId5                    int
+	Attack_speed                  float64
+	Attack_speed_per_level        float64
+	Cons                          string
+	Hp5_per_level                 float64
+	Health                        int
+	Health_per_five               int
+	Health_per_level              int
+	Item1                         string
+	Item2                         string
+	Item3                         string
+	Item4                         string
+	Item5                         string
+	Item6                         string
+	Item7                         string
+	Item8                         string
+	Item9                         string
+	ItemId1                       int
+	ItemId2                       int
+	ItemId3                       int
+	ItemId4                       int
+	ItemId5                       int
+	ItemId6                       int
+	ItemId7                       int
+	ItemId8                       int
+	ItemId9                       int
+	Lore                          string
+	Mp5_per_level                 float64
+	Magic_protection              int
+	Magic_protection_per_level    int
+	Mana                          int
+	Mana_per_five                 float64
+	Mana_per_level                int
+	Name                          string
+	On_free_rotation              string
+	Pantheon                      string
+	Physical_power                int
+	Physical_power_per_level      int
+	Physical_protection           int
+	Physical_protection_per_level float64
+	Pros                          string
+	Roles                         string
+	Speed                         int
+	Title                         string
+	Type                          string
+	Ability_description1          struct {
+		Item_description struct {
+			Cooldown    string
+			Cost        string
+			Description string
+			Menu_items  struct {
+				Description string
+				Value       string
+			}
+			Rank_items struct {
+				Description string
+				Value       string
+			}
+			Secondary_description string
+		}
+	}
+	Ability_description2 struct {
+		Item_description struct {
+			Cooldown    string
+			Cost        string
+			Description string
+			Menu_items  struct {
+				Description string
+				Value       string
+			}
+			Rank_items struct {
+				Description string
+				Value       string
+			}
+			Secondary_description string
+		}
+	}
+	Ability_description3 struct {
+		Item_description struct {
+			Cooldown    string
+			Cost        string
+			Description string
+			Menu_items  struct {
+				Description string
+				Value       string
+			}
+			Rank_items struct {
+				Description string
+				Value       string
+			}
+			Secondary_description string
+		}
+	}
+	Ability_description4 struct {
+		Item_description struct {
+			Cooldown    string
+			Cost        string
+			Description string
+			Menu_items  struct {
+				Description string
+				Value       string
+			}
+			Rank_items struct {
+				Description string
+				Value       string
+			}
+			Secondary_description string
+		}
+	}
+	Ability_description5 struct {
+		Item_description struct {
+			Cooldown    string
+			Cost        string
+			Description string
+			Menu_items  struct {
+				Description string
+				Value       string
+			}
+			Rank_items struct {
+				Description string
+				Value       string
+			}
+			Secondary_description string
+		}
+	}
+	Basic_attack struct {
+		Item_description struct {
+			cooldown    string
+			cost        string
+			description string
+			Menu_items  struct {
+				Description string
+				Value       string
+			}
+			Rank_items struct {
+				Description string
+				Value       string
+			}
+			Secondary_description string
+		}
+	}
+	Id      int
+	Ret_msg string
+}
+
 // Returns ping information for the Smite API endpoint server.
 func Ping() string {
 	url := "http://api.smitegame.com/smiteapi.svc/pingJson"
@@ -292,7 +447,7 @@ func GetPlayer(playerName string) Player {
 	return player
 }
 
-func GetGods() string {
+func GetGods() []God {
 	timestamp := time.Now().UTC().Format("20060102150405")
 	hash := GetMD5Hash(DevId + "getgods" + AuthKey + timestamp)
 	url := "http://api.smitegame.com/smiteapi.svc/getgodsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/1"
@@ -306,10 +461,13 @@ func GetGods() string {
 		if err != nil {
 			Perror(err)
 		} else {
-			return string(contents)
+			var gods []God
+			json.Unmarshal(contents, &gods)
+			return gods
 		}
 	}
-	return ""
+	gods := []God{}
+	return gods
 }
 
 //TO-DO: The server encountered an error processing the request. See server logs for more details.
