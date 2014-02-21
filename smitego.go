@@ -2,6 +2,7 @@ package smitego
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -54,65 +55,6 @@ type Player struct {
 	Team_name           string
 	Wins                int
 	Ret_msg             string
-}
-
-type MatchPlayer struct {
-	Account_level        int
-	Activeid1            int
-	Activeid2            int
-	Assists              int
-	Ban1                 int
-	Ban1Id               int
-	Ban2                 int
-	Ban2Id               int
-	Damage_bot           int
-	Damage_done_magical  int
-	Damage_done_physical int
-	Damage_player        int
-	Damage_taken         int
-	Deaths               int
-	Entry_datetime       string
-	Final_match_level    int
-	Godid                int
-	Gold_earned          int
-	Gold_per_minute      int
-	Healing              int
-	Itemid1              int
-	Itemid2              int
-	Itemid3              int
-	Itemid4              int
-	Itemid5              int
-	Itemid6              int
-	Item_active_1        string
-	Item_active_2        string
-	Item_active_3        string
-	Item_purch_1         string
-	Item_purch_2         string
-	Item_purch_3         string
-	Item_purch_4         string
-	Item_purch_5         string
-	Item_purch_6         string
-	Killing_spree        int
-	Kills_bot            int
-	Kills_player         int
-	Master_level         int
-	Match                int
-	Minutes              int
-	Multi_kill_max       int
-	Partyid              int
-	Reference_name       string
-	Skin                 string
-	Skinid               int
-	Structure_damage     int
-	Surrendered          int
-	Team1score           int
-	Team2score           int
-	Teamid               int
-	Team_name            string
-	Win_status           string
-	Name                 string
-	Playername           string
-	Ret_msg              string
 }
 
 type MatchHistory struct {
@@ -374,14 +316,15 @@ func GetMatchDetails(matchId string) []MatchPlayer {
 		if err != nil {
 			Perror(err)
 		} else {
-			var matchPlayers []MatchPlayer
-			json.Unmarshal(contents, &matchPlayers)
-			return matchPlayers
+			fmt.Println("Test")
+			var matchDetail []MatchPlayer
+			json.Unmarshal(contents, &matchDetail)
+			return matchDetail
 		}
 	}
 
-	matchPlayers := []MatchPlayer{}
-	return matchPlayers
+	matchDetail := []MatchPlayer{}
+	return matchDetail
 }
 
 func GetMatchHistory(playerName string) []MatchHistory {
