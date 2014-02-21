@@ -315,11 +315,10 @@ func GetGods() []God {
 	return gods
 }
 
-//TO-DO: The server encountered an error processing the request. See server logs for more details.
-func GetItems() string {
+func GetItems() []Item {
 	timestamp := time.Now().UTC().Format("20060102150405")
 	hash := GetMD5Hash(DevId + "getitems" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getitemsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/en"
+	url := "http://api.smitegame.com/smiteapi.svc/getitemsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/1"
 
 	response, err := http.Get(url)
 	if err != nil {
@@ -330,11 +329,13 @@ func GetItems() string {
 		if err != nil {
 			Perror(err)
 		} else {
-			return string(contents)
+			var items []Item
+			json.Unmarshal(contents, &items)
+			return items
 		}
 	}
-
-	return ""
+	items := []Item{}
+	return items
 }
 
 //TO-DO: Service Endpoint not found.
