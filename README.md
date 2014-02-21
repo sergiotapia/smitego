@@ -5,7 +5,62 @@ SmiteGo is an API wrapper for the Smite game from HiRez. It is written in Go!
 
 ## How to use?
 
-Documentation on usage will be updated here once the library is feature complete.
+SmiteGo is really simple to use. Below is a sample go file that calls the various API features HiRez offers.
+
+    package main
+
+    import (
+        "fmt"
+        "github.com/sergiotapia/smitego"
+    )
+
+    func main() {
+
+        // This is a demo of the Smitego API package.
+        // Source code: www.github.com/sergiotapia/smitego
+
+        // Start by providing your DevId and AuthKey.
+        // If you don't have one request it from Hirez.
+        smitego.DevId = "7777"
+        smitego.AuthKey = "29123BCE7ACF4B1237310A123FB123BE"
+
+        // Smite API calls require a session_id that must be
+        // generated every 15 minutes. Of course Smitego handles
+        // this for you automatically. Just call for the info you
+        // need and Smitego will refresh the session_id as needed.
+
+        // APIs - Connectivity
+        // ------------------------
+        smitego.GetSessionId()
+        fmt.Println("SessionID:", smitego.SessionId)
+
+        pingResponse := smitego.Ping()
+        fmt.Println(pingResponse)
+
+        // APIs - Smite Data
+        // ------------------------
+        dataUsed := smitego.GetDataUsed()
+        fmt.Println(dataUsed)
+
+        friends := smitego.GetFriends("FaymousHate")
+        fmt.Println(friends)
+
+        godRanks := smitego.GetGodRanks("FaymousHate")
+        fmt.Println(godRanks)
+
+        gods := smitego.GetGods()
+        fmt.Println(gods)
+
+        items := smitego.GetItems()
+        fmt.Println(items)
+
+        match := smitego.GetMatchDetails("45313775")
+        fmt.Println(match)
+
+        matchHistory := smitego.GetMatchHistory("FaymousHate")
+        fmt.Println(matchHistory[0].Match)
+
+    }
 
 ## License
 
