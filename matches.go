@@ -62,3 +62,25 @@ type MatchPlayer struct {
 	Playername         string `json:"playerName"`
 	RetMsg             string `json:"ret_msg"`
 }
+
+type ModeDetail struct {
+	Ban1               string `json:"Ban1"`
+	Ban2               string `json:"Ban2"`
+	EntryDatetime      string `json:"Entry_Datetime"`
+	Match              int    `json:"Match"`
+	MatchTime          int    `json:"Match_Time"`
+	OfflineSpectators  int    `json:"Offline_Spectators"`
+	RealtimeSpectators int    `json:"Realtime_Spectators"`
+	RecordingEnded     string `json:"Recording_Ended"`
+	RecordingStarted   string `json:"Recording_Started"`
+	Team1Avglevel      int    `json:"Team1_AvgLevel"`
+	Team1Gold          int    `json:"Team1_Gold"`
+	Team1Kills         int    `json:"Team1_Kills"`
+	Team1Score         int    `json:"Team1_Score"`
+	Team2Avglevel      int    `json:"Team2_AvgLevel"`
+	Team2Gold          int    `json:"Team2_Gold"`
+	Team2Kills         int    `json:"Team2_Kills"`
+	Team2Score         int    `json:"Team2_Score"`
+	WinningTeam        int    `json:"Winning_Team"`
+	RetMsg             string `json:"ret_msg"`
+}

@@ -160,6 +160,32 @@ func GetDataUsed() DevApiDataUsed {
 	return dataUsed
 }
 
+// Returns the mode details for a given
+// match id value.
+func GetModeDetails(matchId string) ModeDetail {
+	timestamp := time.Now().UTC().Format("20060102150405")
+	hash := GetMD5Hash(DevId + "getdemodetails" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/getdemodetailsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/" + matchId
+
+	response, err := http.Get(url)
+	if err != nil {
+		Perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			Perror(err)
+		} else {
+			var modeDetail []ModeDetail
+			json.Unmarshal(contents, &modeDetail)
+			return modeDetail[0]
+		}
+	}
+
+	modeDetail := ModeDetail{RetMsg: "Not found"}
+	return modeDetail
+}
+
 // Returns a collection of Player names that are friends with
 // playerName sent.
 func GetFriends(playerName string) []Friend {
