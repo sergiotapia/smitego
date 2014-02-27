@@ -328,6 +328,28 @@ func GetLeagueSeasons(queueId int) string {
 	return ""
 }
 
+// TODO: Create struct and find out why Request Error is
+// happening on correct API call.
+func GetQueueStats(playerName string, queueId int) string {
+	timestamp := time.Now().UTC().Format("20060102150405")
+	hash := GetMD5Hash(DevId + "getqueuestats" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/getqueuestatsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/" + playerName + "/" + string(queueId)
+	fmt.Println(url)
+	response, err := http.Get(url)
+	if err != nil {
+		Perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			Perror(err)
+		} else {
+			return string(contents)
+		}
+	}
+	return ""
+}
+
 //TO-DO: Service Endpoint not found.
 func GetTopRanked(queueId int) string {
 	timestamp := time.Now().UTC().Format("20060102150405")
