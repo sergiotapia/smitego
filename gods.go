@@ -1,5 +1,12 @@
 package smitego
 
+import (
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
+)
+
+// God is a struct that represents a God character in Smite.
 type God struct {
 	Ability1                   string      `json:"Ability1"`
 	Ability2                   string      `json:"Ability2"`
@@ -61,12 +68,40 @@ type God struct {
 	AbilityDescription4        Ability     `json:"abilityDescription4"`
 	AbilityDescription5        Ability     `json:"abilityDescription5"`
 	BasickAttack               BasicAttack `json:"basicAttack"`
+	ReturnMessage              string      `json:"ret_msg"`
+	ID                         int         `json:"id"`
 }
 
+// BasicAttack is a struct that represents a God's basic attack information.
 type BasicAttack struct {
 	AttackDescription ItemDescription `json:"itemDescription"`
 }
 
+// Ability is a struct that represents a God's spell ability information.
 type Ability struct {
 	AbilityDescription ItemDescription `json:"itemDescription"`
+}
+
+// GetGods returns a new God array instance with all the God's and their
+// information from Smite.
+func GetGods() []God {
+	hash := getMD5Hash(DevID + "getgods" + AuthKey + getTimestamp())
+	url := "http://api.smitegame.com/smiteapi.svc/getgodsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + getTimestamp() + "/1"
+
+	response, err := http.Get(url)
+	if err != nil {
+		perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			perror(err)
+		} else {
+			var gods []God
+			json.Unmarshal(contents, &gods)
+			return gods
+		}
+	}
+	gods := []God{}
+	return gods
 }
