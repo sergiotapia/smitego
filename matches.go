@@ -117,3 +117,28 @@ func GetModeDetails(matchID string) ModeDetail {
 	modeDetail := ModeDetail{ReturnMessage: "Not found"}
 	return modeDetail
 }
+
+// GetMatchDetails returns a MatchPlayer array instance loaded with each
+// player's information for the match.
+func GetMatchDetails(matchID string) []MatchPlayer {
+	hash := getMD5Hash(DevID + "getmatchdetails" + AuthKey + getTimestamp())
+	url := "http://api.smitegame.com/smiteapi.svc/getmatchdetailsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + getTimestamp() + "/" + matchID
+
+	response, err := http.Get(url)
+	if err != nil {
+		perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			perror(err)
+		} else {
+			var matchDetail []MatchPlayer
+			json.Unmarshal(contents, &matchDetail)
+			return matchDetail
+		}
+	}
+
+	matchDetail := []MatchPlayer{}
+	return matchDetail
+}

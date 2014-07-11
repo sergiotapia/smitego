@@ -157,31 +157,6 @@ func GetTopRanked(queueId int) string {
 	return ""
 }
 
-func GetMatchDetails(matchId string) []MatchPlayer {
-	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := getMD5Hash(DevID + "getmatchdetails" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getmatchdetailsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp + "/" + matchId
-
-	response, err := http.Get(url)
-	if err != nil {
-		perror(err)
-	} else {
-		defer response.Body.Close()
-		contents, err := ioutil.ReadAll(response.Body)
-		if err != nil {
-			perror(err)
-		} else {
-			fmt.Println("Test")
-			var matchDetail []MatchPlayer
-			json.Unmarshal(contents, &matchDetail)
-			return matchDetail
-		}
-	}
-
-	matchDetail := []MatchPlayer{}
-	return matchDetail
-}
-
 func GetMatchHistory(playerName string) []MatchHistory {
 	timestamp := time.Now().UTC().Format("20060102150405")
 	hash := getMD5Hash(DevID + "getmatchhistory" + AuthKey + timestamp)
