@@ -72,6 +72,20 @@ type God struct {
 	ID                         int         `json:"id"`
 }
 
+// GodRecommendedItem is a struct that represents a God's recommended
+// item to purchase.
+type GodRecommendedItem struct {
+	Category        string `json:"Category"`
+	CategoryValueID int    `json:"category_value_id"`
+	Name            string `json:"Item"`
+	ItemID          int    `json:"item_id"`
+	Role            string `json:"Role"`
+	RoleValueID     int    `json:"role_value_id"`
+	GodID           int    `json:"god_id"`
+	GodName         string `json:"god_name"`
+	ReturnMessage   string `json:"ret_msg"`
+}
+
 // BasicAttack is a struct that represents a God's basic attack information.
 type BasicAttack struct {
 	AttackDescription ItemDescription `json:"itemDescription"`
@@ -104,4 +118,28 @@ func GetGods() []God {
 	}
 	gods := []God{}
 	return gods
+}
+
+// GetGodRecommendedItems returns a new GodRecommendedItem array instance
+// with all the God's recommended items and their information from Smite.
+func GetGodRecommendedItems(godID string) []GodRecommendedItem {
+	hash := getMD5Hash(DevID + "getgodrecommendeditems" + AuthKey + getTimestamp())
+	url := "http://api.smitegame.com/smiteapi.svc/getgodrecommendeditemsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + getTimestamp() + "/" + godID + "/1"
+
+	response, err := http.Get(url)
+	if err != nil {
+		perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			perror(err)
+		} else {
+			var godRecommendedItems []GodRecommendedItem
+			json.Unmarshal(contents, &godRecommendedItems)
+			return godRecommendedItems
+		}
+	}
+	godRecommendedItems := []GodRecommendedItem{}
+	return godRecommendedItems
 }
