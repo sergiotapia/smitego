@@ -8,54 +8,34 @@ import (
 	"time"
 )
 
-var SessionId = ""
-var DevId = ""
-var AuthKey = ""
-
 // Queue ID's
-const (
-	Conquest5v5               = 423
-	Novice                    = 424
-	Conquest                  = 426
-	Practice                  = 427
-	Challenge                 = 429
-	Joust                     = 431
-	Domination                = 433
-	MatchOfTheDay             = 434
-	Arena                     = 435
-	ArenaChallenge            = 438
-	DominationChallenge       = 439
-	JoustQueued               = 440
-	RenaissanceJoustChallenge = 441
-	ConquestTeamRanked        = 442
-	RankedConquest            = 430
-	RankedJoust1v1            = 449
-	RankedJoust3v3            = 450
-	MasteryConquest           = 451
-	LeagueArena               = 451
-	LeagueConquest            = 452
-	LeagueBronze              = 1
-	LeagueSilver              = 2
-	LeagueGold                = 3
-	LeaguePlatinum            = 4
-	LeagueDiamond             = 5
-)
-
-type Player struct {
-	Created_datetime    string
-	Last_login_datetime string
-	Leaves              int
-	Level               int
-	Losses              int
-	Masterylevel        int
-	Name                string
-	Rank_confidence     int
-	Rank_stat           float32
-	Teamid              int
-	Team_name           string
-	Wins                int
-	Ret_msg             string
-}
+// const (
+// 	Conquest5v5               = 423
+// 	Novice                    = 424
+// 	Conquest                  = 426
+// 	Practice                  = 427
+// 	Challenge                 = 429
+// 	Joust                     = 431
+// 	Domination                = 433
+// 	MatchOfTheDay             = 434
+// 	Arena                     = 435
+// 	ArenaChallenge            = 438
+// 	DominationChallenge       = 439
+// 	JoustQueued               = 440
+// 	RenaissanceJoustChallenge = 441
+// 	ConquestTeamRanked        = 442
+// 	RankedConquest            = 430
+// 	RankedJoust1v1            = 449
+// 	RankedJoust3v3            = 450
+// 	MasteryConquest           = 451
+// 	LeagueArena               = 451
+// 	LeagueConquest            = 452
+// 	LeagueBronze              = 1
+// 	LeagueSilver              = 2
+// 	LeagueGold                = 3
+// 	LeaguePlatinum            = 4
+// 	LeagueDiamond             = 5
+// )
 
 type MatchHistory struct {
 	Activeid1      int
@@ -121,12 +101,12 @@ func Ping() string {
 
 	response, err := http.Get(url)
 	if err != nil {
-		Perror(err)
+		perror(err)
 	} else {
 		defer response.Body.Close()
 		contents, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			Perror(err)
+			perror(err)
 		} else {
 			return string(contents[:])
 		}
@@ -138,17 +118,17 @@ func Ping() string {
 // sessions, concurrent sessions, request_limit, et al.
 func GetDataUsed() DevApiDataUsed {
 	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := GetMD5Hash(DevId + "getdataused" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getdatausedJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp
+	hash := getMD5Hash(DevID + "getdataused" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/getdatausedJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp
 
 	response, err := http.Get(url)
 	if err != nil {
-		Perror(err)
+		perror(err)
 	} else {
 		defer response.Body.Close()
 		contents, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			Perror(err)
+			perror(err)
 		} else {
 			var dataUsed []DevApiDataUsed
 			json.Unmarshal(contents, &dataUsed)
@@ -164,17 +144,17 @@ func GetDataUsed() DevApiDataUsed {
 // match id value.
 func GetModeDetails(matchId string) ModeDetail {
 	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := GetMD5Hash(DevId + "getdemodetails" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getdemodetailsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/" + matchId
+	hash := getMD5Hash(DevID + "getdemodetails" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/getdemodetailsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp + "/" + matchId
 
 	response, err := http.Get(url)
 	if err != nil {
-		Perror(err)
+		perror(err)
 	} else {
 		defer response.Body.Close()
 		contents, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			Perror(err)
+			perror(err)
 		} else {
 			var modeDetail []ModeDetail
 			json.Unmarshal(contents, &modeDetail)
@@ -190,17 +170,17 @@ func GetModeDetails(matchId string) ModeDetail {
 // playerName sent.
 func GetFriends(playerName string) []Friend {
 	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := GetMD5Hash(DevId + "getfriends" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getfriendsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/" + playerName
+	hash := getMD5Hash(DevID + "getfriends" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/getfriendsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp + "/" + playerName
 
 	response, err := http.Get(url)
 	if err != nil {
-		Perror(err)
+		perror(err)
 	} else {
 		defer response.Body.Close()
 		contents, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			Perror(err)
+			perror(err)
 		} else {
 			var friends []Friend
 			json.Unmarshal(contents, &friends)
@@ -215,17 +195,17 @@ func GetFriends(playerName string) []Friend {
 // has for each God ordered from highest ranked to lowest ranked.
 func GetGodRanks(playerName string) []GodRank {
 	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := GetMD5Hash(DevId + "getgodranks" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getgodranksJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/" + playerName
+	hash := getMD5Hash(DevID + "getgodranks" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/getgodranksJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp + "/" + playerName
 
 	response, err := http.Get(url)
 	if err != nil {
-		Perror(err)
+		perror(err)
 	} else {
 		defer response.Body.Close()
 		contents, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			Perror(err)
+			perror(err)
 		} else {
 			var godRanks []GodRank
 			json.Unmarshal(contents, &godRanks)
@@ -236,43 +216,19 @@ func GetGodRanks(playerName string) []GodRank {
 	return godRanks
 }
 
-func GetPlayer(playerName string) Player {
-	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := GetMD5Hash(DevId + "getplayer" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getplayerJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/" + playerName
-
-	response, err := http.Get(url)
-	if err != nil {
-		Perror(err)
-	} else {
-		defer response.Body.Close()
-		contents, err := ioutil.ReadAll(response.Body)
-		if err != nil {
-			Perror(err)
-		} else {
-			var players []Player
-			json.Unmarshal(contents, &players)
-			return players[0]
-		}
-	}
-
-	player := Player{Ret_msg: "Not found"}
-	return player
-}
-
 func GetGods() []God {
 	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := GetMD5Hash(DevId + "getgods" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getgodsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/1"
+	hash := getMD5Hash(DevID + "getgods" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/getgodsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp + "/1"
 
 	response, err := http.Get(url)
 	if err != nil {
-		Perror(err)
+		perror(err)
 	} else {
 		defer response.Body.Close()
 		contents, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			Perror(err)
+			perror(err)
 		} else {
 			var gods []God
 			json.Unmarshal(contents, &gods)
@@ -285,17 +241,17 @@ func GetGods() []God {
 
 func GetItems() []Item {
 	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := GetMD5Hash(DevId + "getitems" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getitemsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/1"
+	hash := getMD5Hash(DevID + "getitems" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/getitemsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp + "/1"
 
 	response, err := http.Get(url)
 	if err != nil {
-		Perror(err)
+		perror(err)
 	} else {
 		defer response.Body.Close()
 		contents, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			Perror(err)
+			perror(err)
 		} else {
 			var items []Item
 			json.Unmarshal(contents, &items)
@@ -310,17 +266,17 @@ func GetItems() []Item {
 // happening on correct API call.
 func GetLeagueSeasons(queueId int) string {
 	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := GetMD5Hash(DevId + "getleagueseasons" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getleagueseasonsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/" + string(queueId)
+	hash := getMD5Hash(DevID + "getleagueseasons" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/getleagueseasonsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp + "/" + string(queueId)
 	fmt.Println(url)
 	response, err := http.Get(url)
 	if err != nil {
-		Perror(err)
+		perror(err)
 	} else {
 		defer response.Body.Close()
 		contents, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			Perror(err)
+			perror(err)
 		} else {
 			return string(contents)
 		}
@@ -332,17 +288,17 @@ func GetLeagueSeasons(queueId int) string {
 // happening on correct API call.
 func GetQueueStats(playerName string, queueId int) string {
 	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := GetMD5Hash(DevId + "getqueuestats" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getqueuestatsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/" + playerName + "/" + string(queueId)
+	hash := getMD5Hash(DevID + "getqueuestats" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/getqueuestatsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp + "/" + playerName + "/" + string(queueId)
 	fmt.Println(url)
 	response, err := http.Get(url)
 	if err != nil {
-		Perror(err)
+		perror(err)
 	} else {
 		defer response.Body.Close()
 		contents, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			Perror(err)
+			perror(err)
 		} else {
 			return string(contents)
 		}
@@ -353,17 +309,17 @@ func GetQueueStats(playerName string, queueId int) string {
 //TO-DO: Service Endpoint not found.
 func GetTopRanked(queueId int) string {
 	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := GetMD5Hash(DevId + "gettopranked" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/gettoprankedJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/" + string(queueId)
+	hash := getMD5Hash(DevID + "gettopranked" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/gettoprankedJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp + "/" + string(queueId)
 
 	response, err := http.Get(url)
 	if err != nil {
-		Perror(err)
+		perror(err)
 	} else {
 		defer response.Body.Close()
 		contents, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			Perror(err)
+			perror(err)
 		} else {
 			return string(contents)
 		}
@@ -374,17 +330,17 @@ func GetTopRanked(queueId int) string {
 
 func GetMatchDetails(matchId string) []MatchPlayer {
 	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := GetMD5Hash(DevId + "getmatchdetails" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getmatchdetailsJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/" + matchId
+	hash := getMD5Hash(DevID + "getmatchdetails" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/getmatchdetailsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp + "/" + matchId
 
 	response, err := http.Get(url)
 	if err != nil {
-		Perror(err)
+		perror(err)
 	} else {
 		defer response.Body.Close()
 		contents, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			Perror(err)
+			perror(err)
 		} else {
 			fmt.Println("Test")
 			var matchDetail []MatchPlayer
@@ -399,17 +355,17 @@ func GetMatchDetails(matchId string) []MatchPlayer {
 
 func GetMatchHistory(playerName string) []MatchHistory {
 	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := GetMD5Hash(DevId + "getmatchhistory" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getmatchhistoryJson/" + DevId + "/" + hash + "/" + SessionId + "/" + timestamp + "/" + playerName
+	hash := getMD5Hash(DevID + "getmatchhistory" + AuthKey + timestamp)
+	url := "http://api.smitegame.com/smiteapi.svc/getmatchhistoryJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp + "/" + playerName
 
 	response, err := http.Get(url)
 	if err != nil {
-		Perror(err)
+		perror(err)
 	} else {
 		defer response.Body.Close()
 		contents, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			Perror(err)
+			perror(err)
 		} else {
 			var matchHistory []MatchHistory
 			json.Unmarshal(contents, &matchHistory)
