@@ -23,6 +23,19 @@ type session struct {
 	Timestamp     string `json:"timestamp"`
 }
 
+// DataUsed is a struct that represents a how many resources you have used
+// so far in the HiRez Smite API server.
+type DataUsed struct {
+	ActiveSession      int    `json:"Active_Sessions"`
+	ConcurrentSessions int    `json:"Concurrent_Sessions"`
+	RequestLimitDaily  int    `json:"Request_Limit_Daily"`
+	SessionCap         int    `json:"Session_Cap"`
+	SessionTimeLimit   int    `json:"Session_Time_Limit"`
+	TotalRequestsToday int    `json:"Total_Requests_Today"`
+	TotalSessionsToday int    `json:"Total_Sessions_Today"`
+	ReturnMessage      string `json:"ret_msg"`
+}
+
 // GetSessionID populates the SessionID with a current and valid session id
 // assigned by the Smite API server.
 func GetSessionID() {
@@ -43,4 +56,28 @@ func GetSessionID() {
 			SessionID = session.SessionID
 		}
 	}
+}
+
+// GetDataUsed returns a DataUsed instance loaded with API usage information
+// on the HiRez Smite API server.
+func GetDataUsed() DataUsed {
+	hash := getMD5Hash(DevID + "getdataused" + AuthKey + getTimestamp())
+	url := "http://api.smitegame.com/smiteapi.svc/getdatausedJson/" + DevID + "/" + hash + "/" + SessionID + "/" + getTimestamp()
+
+	response, err := http.Get(url)
+	if err != nil {
+		perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			perror(err)
+		} else {
+			var dataUsed []DataUsed
+			json.Unmarshal(contents, &dataUsed)
+			return dataUsed[0]
+		}
+	}
+	dataUsed := DataUsed{ReturnMessage: "Not found"}
+	return dataUsed
 }

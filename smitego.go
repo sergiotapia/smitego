@@ -72,17 +72,6 @@ type MatchHistory struct {
 	Ret_msg        string
 }
 
-type DevApiDataUsed struct {
-	Active_sessions      int
-	Concurrent_sessions  int
-	Request_limit_daily  int
-	Session_cap          int
-	Session_time_limit   int
-	Total_requests_today int
-	Total_sessions_today int
-	Ret_msg              string
-}
-
 type Friend struct {
 	Name    string
 	Ret_msg string
@@ -112,32 +101,6 @@ func Ping() string {
 		}
 	}
 	return "Ping service not available."
-}
-
-// Returns data for your Dev API account. Counts active
-// sessions, concurrent sessions, request_limit, et al.
-func GetDataUsed() DevApiDataUsed {
-	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := getMD5Hash(DevID + "getdataused" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getdatausedJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp
-
-	response, err := http.Get(url)
-	if err != nil {
-		perror(err)
-	} else {
-		defer response.Body.Close()
-		contents, err := ioutil.ReadAll(response.Body)
-		if err != nil {
-			perror(err)
-		} else {
-			var dataUsed []DevApiDataUsed
-			json.Unmarshal(contents, &dataUsed)
-			return dataUsed[0]
-		}
-	}
-
-	dataUsed := DevApiDataUsed{Ret_msg: "Not found"}
-	return dataUsed
 }
 
 // Returns the mode details for a given
