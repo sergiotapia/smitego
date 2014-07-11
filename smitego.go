@@ -72,11 +72,6 @@ type MatchHistory struct {
 	Ret_msg        string
 }
 
-type Friend struct {
-	Name    string
-	Ret_msg string
-}
-
 type GodRank struct {
 	Rank        int
 	Worshippers int
@@ -101,31 +96,6 @@ func Ping() string {
 		}
 	}
 	return "Ping service not available."
-}
-
-// Returns a collection of Player names that are friends with
-// playerName sent.
-func GetFriends(playerName string) []Friend {
-	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := getMD5Hash(DevID + "getfriends" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getfriendsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp + "/" + playerName
-
-	response, err := http.Get(url)
-	if err != nil {
-		perror(err)
-	} else {
-		defer response.Body.Close()
-		contents, err := ioutil.ReadAll(response.Body)
-		if err != nil {
-			perror(err)
-		} else {
-			var friends []Friend
-			json.Unmarshal(contents, &friends)
-			return friends
-		}
-	}
-	friends := []Friend{}
-	return friends
 }
 
 // Returns a collection of rankings/worshippers a user

@@ -62,6 +62,12 @@ type Player struct {
 	ReturnMessage     string         `json:"ret_msg"`
 }
 
+// Friend is a struct that represents a Smite player's friend.
+type Friend struct {
+	Name          string `json:"name"`
+	ReturnMessage string `json:"ret_msg"`
+}
+
 // GetPlayer returns a new Player instance with the fields filled with
 // data from the json response.
 func GetPlayer(playerName string) Player {
@@ -85,4 +91,28 @@ func GetPlayer(playerName string) Player {
 
 	player := Player{ReturnMessage: "Not found"}
 	return player
+}
+
+// GetFriends returns a new Friend array instance with a collection of a
+// player's friends.
+func GetFriends(playerName string) []Friend {
+	hash := getMD5Hash(DevID + "getfriends" + AuthKey + getTimestamp())
+	url := "http://api.smitegame.com/smiteapi.svc/getfriendsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + getTimestamp() + "/" + playerName
+
+	response, err := http.Get(url)
+	if err != nil {
+		perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			perror(err)
+		} else {
+			var friends []Friend
+			json.Unmarshal(contents, &friends)
+			return friends
+		}
+	}
+	friends := []Friend{}
+	return friends
 }
