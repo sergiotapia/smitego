@@ -97,8 +97,8 @@ type ModeDetail struct {
 // GetModeDetails returns a ModeDetail instance loaded with mode information
 // for a specific match ID.
 func GetModeDetails(matchID string) ModeDetail {
-	hash := getMD5Hash(DevID + "getmodetails" + AuthKey + getTimestamp())
-	url := "http://api.smitegame.com/smiteapi.svc/getmodetailsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + getTimestamp() + matchID
+	hash := getMD5Hash(DevID + "getdemodetails" + AuthKey + getTimestamp())
+	url := "http://api.smitegame.com/smiteapi.svc/getdemodetailsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + getTimestamp() + "/" + matchID
 
 	response, err := http.Get(url)
 	if err != nil {
