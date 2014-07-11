@@ -72,13 +72,6 @@ type MatchHistory struct {
 	Ret_msg        string
 }
 
-type GodRank struct {
-	Rank        int
-	Worshippers int
-	God         string
-	Ret_msg     string
-}
-
 // Returns ping information for the Smite API endpoint server.
 func Ping() string {
 	url := "http://api.smitegame.com/smiteapi.svc/pingJson"
@@ -96,31 +89,6 @@ func Ping() string {
 		}
 	}
 	return "Ping service not available."
-}
-
-// Returns a collection of rankings/worshippers a user
-// has for each God ordered from highest ranked to lowest ranked.
-func GetGodRanks(playerName string) []GodRank {
-	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := getMD5Hash(DevID + "getgodranks" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getgodranksJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp + "/" + playerName
-
-	response, err := http.Get(url)
-	if err != nil {
-		perror(err)
-	} else {
-		defer response.Body.Close()
-		contents, err := ioutil.ReadAll(response.Body)
-		if err != nil {
-			perror(err)
-		} else {
-			var godRanks []GodRank
-			json.Unmarshal(contents, &godRanks)
-			return godRanks
-		}
-	}
-	godRanks := []GodRank{}
-	return godRanks
 }
 
 func GetGods() []God {

@@ -62,6 +62,15 @@ type Player struct {
 	ReturnMessage     string         `json:"ret_msg"`
 }
 
+// GodRank is a struct that represents a player's god rank for the Gods
+// in Smite.
+type GodRank struct {
+	Rank          int    `json:"rank"`
+	Worshippers   int    `json:"worshippers"`
+	God           string `json:"god"`
+	ReturnMessage string `json:"ret_msg"`
+}
+
 // Friend is a struct that represents a Smite player's friend.
 type Friend struct {
 	Name          string `json:"name"`
@@ -91,6 +100,30 @@ func GetPlayer(playerName string) Player {
 
 	player := Player{ReturnMessage: "Not found"}
 	return player
+}
+
+// GetGodRanks returns a new GodRank array instance with a collection of a
+// player's god rank for each God in Smite.
+func GetGodRanks(playerName string) []GodRank {
+	hash := getMD5Hash(DevID + "getgodranks" + AuthKey + getTimestamp())
+	url := "http://api.smitegame.com/smiteapi.svc/getgodranksJson/" + DevID + "/" + hash + "/" + SessionID + "/" + getTimestamp() + "/" + playerName
+
+	response, err := http.Get(url)
+	if err != nil {
+		perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			perror(err)
+		} else {
+			var godRanks []GodRank
+			json.Unmarshal(contents, &godRanks)
+			return godRanks
+		}
+	}
+	godRanks := []GodRank{}
+	return godRanks
 }
 
 // GetFriends returns a new Friend array instance with a collection of a
