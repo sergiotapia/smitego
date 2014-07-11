@@ -91,29 +91,6 @@ func Ping() string {
 	return "Ping service not available."
 }
 
-func GetItems() []Item {
-	timestamp := time.Now().UTC().Format("20060102150405")
-	hash := getMD5Hash(DevID + "getitems" + AuthKey + timestamp)
-	url := "http://api.smitegame.com/smiteapi.svc/getitemsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + timestamp + "/1"
-
-	response, err := http.Get(url)
-	if err != nil {
-		perror(err)
-	} else {
-		defer response.Body.Close()
-		contents, err := ioutil.ReadAll(response.Body)
-		if err != nil {
-			perror(err)
-		} else {
-			var items []Item
-			json.Unmarshal(contents, &items)
-			return items
-		}
-	}
-	items := []Item{}
-	return items
-}
-
 // TODO: Create struct and find out why Request Error is
 // happening on correct API call.
 func GetLeagueSeasons(queueId int) string {
