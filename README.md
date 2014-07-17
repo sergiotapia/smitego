@@ -6,8 +6,6 @@ Package smitego is an API wrapper for Hirez' Smite game API.
 If you want easily consume data from Hirez' Smite API server then smitego
 is definitely the easiest way to do it.
 
-For a full guide visit http://github.com/sergiotapia/smitego
-
 ```go
 package main
 
@@ -28,11 +26,38 @@ func main() {
 }
 ```
 
+## Supported API Endpoints
+
+- [ ] API - Connectivity
+  - [ ] Ping
+  - [x] CreateSession
+  - [ ] TestSession
+- [ ] API - Smite Data
+  - [x] GetDataUsed
+  - [x] GetDemodeDetails
+  - [x] GetFriends
+  - [x] GetGodRanks
+  - [x] GetGods
+  - [x] GetGodRecommendedItems
+  - [x] GetItems
+  - [x] GetMatchDetails
+  - [ ] GetMatchIdsByQueue
+  - [ ] GetLeagueLeaderBoard
+  - [ ] GetLeagueSeasons
+  - [ ] GetMatchHistory
+  - [ ] GetPlayer
+  - [ ] GetQueueStats
+  - [ ] GetTeamDetails
+  - [ ] GetTeamMatchHistory
+  - [ ] GetTeamPlayers
+  - [ ] GetTopMatches
+  - [ ] SearchTeams
+
 ## License
 
 The MIT License (MIT)
 
-Copyright (c) 2013 Sergio Tapia Gutierrez
+Copyright (c) 2014 Sergio Tapia Gutierrez
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
