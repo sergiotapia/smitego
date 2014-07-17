@@ -1,66 +1,32 @@
 SmiteGo
 =======
 
-SmiteGo is an API wrapper for the Smite game from HiRez. It is written in Go!
+Package smitego is an API wrapper for Hirez' Smite game API.
 
-## How to use?
+If you want easily consume data from Hirez' Smite API server then smitego
+is definitely the easiest way to do it.
 
-SmiteGo is really simple to use. Below is a sample go file that calls the various API features HiRez offers.
+For a full guide visit http://github.com/sergiotapia/smitego
 
-    package main
+```go
+package main
 
-    import (
-        "fmt"
-        "github.com/sergiotapia/smitego"
-    )
+import (
+  "fmt"
+  "github.com/kr/pretty"
+  "github.com/sergiotapia/smitego"
+)
 
-    func main() {
+func main() {
+  smitego.DevID = "1132"
+  smitego.AuthKey = "29FA3BCE7ACF4BDDA7310A352FB855BE"
 
-        // This is a demo of the Smitego API package.
-        // Source code: www.github.com/sergiotapia/smitego
+  smitego.GetSessionID()
 
-        // Start by providing your DevId and AuthKey.
-        // If you don't have one request it from Hirez.
-        smitego.DevId = "7777"
-        smitego.AuthKey = "29123BCE7ACF4B1237310A123FB123BE"
-
-        // Smite API calls require a session_id that must be
-        // generated every 15 minutes. Of course Smitego handles
-        // this for you automatically. Just call for the info you
-        // need and Smitego will refresh the session_id as needed.
-
-        // APIs - Connectivity
-        // ------------------------
-        smitego.GetSessionId()
-        fmt.Println("SessionID:", smitego.SessionId)
-
-        pingResponse := smitego.Ping()
-        fmt.Println(pingResponse)
-
-        // APIs - Smite Data
-        // ------------------------
-        dataUsed := smitego.GetDataUsed()
-        fmt.Println(dataUsed)
-
-        friends := smitego.GetFriends("FaymousHate")
-        fmt.Println(friends)
-
-        godRanks := smitego.GetGodRanks("FaymousHate")
-        fmt.Println(godRanks)
-
-        gods := smitego.GetGods()
-        fmt.Println(gods)
-
-        items := smitego.GetItems()
-        fmt.Println(items)
-
-        match := smitego.GetMatchDetails("45313775")
-        fmt.Println(match)
-
-        matchHistory := smitego.GetMatchHistory("FaymousHate")
-        fmt.Println(matchHistory[0].Match)
-
-    }
+  match := smitego.GetMatchDetails("78900556")
+  fmt.Printf("%# v", pretty.Formatter(match))
+}
+```
 
 ## License
 
