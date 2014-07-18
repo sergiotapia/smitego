@@ -149,3 +149,25 @@ func GetFriends(playerName string) []Friend {
 	friends := []Friend{}
 	return friends
 }
+
+// GetLeagueLeaderBoard returns a JSON string of players for a given queue on
+// a given tier grade for a given season. Currently this API endpoint is not
+// working well on HiRez's end.
+func GetLeagueLeaderBoard(queue string, tier string, season string) string {
+	hash := getMD5Hash(DevID + "getleagueleaderboard" + AuthKey + getTimestamp())
+	url := "http://api.smitegame.com/smiteapi.svc/getleagueleaderboardJson/" + DevID + "/" + hash + "/" + SessionID + "/" + getTimestamp() + "/" + queue + "/" + tier + "/" + season
+
+	response, err := http.Get(url)
+	if err != nil {
+		perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			perror(err)
+		} else {
+			return string(contents)
+		}
+	}
+	return ""
+}

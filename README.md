@@ -42,7 +42,7 @@ func main() {
   - [x] GetItems
   - [x] GetMatchDetails
   - [ ] GetMatchIdsByQueue - *note: Look into bug, is it on Hirez's side?*
-  - [ ] GetLeagueLeaderBoard
+  - [ ] GetLeagueLeaderBoard - *note: Look into bug, is it on Hirez's side?*
   - [ ] GetLeagueSeasons
   - [ ] GetMatchHistory
   - [ ] GetPlayer
