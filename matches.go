@@ -29,6 +29,61 @@ const (
 	ArenaLeague         = "452"
 )
 
+// MatchHistory is a struct that represents a player's match history information.
+type MatchHistory struct {
+	Activeid1       int    `json:"ActiveId1"`
+	Activeid2       int    `json:"ActiveId2"`
+	Active1         string `json:"Active_1"`
+	Active2         string `json:"Active_2"`
+	Active3         string `json:"Active_3"`
+	Assists         int    `json:"Assists"`
+	Ban1            int    `json:"Ban1"`
+	Ban1ID          int    `json:"Ban1Id"`
+	Ban2            int    `json:"Ban2"`
+	Ban2ID          int    `json:"Ban2Id"`
+	Ban3            int    `json:"Ban3"`
+	Ban3ID          int    `json:"Ban3Id"`
+	Ban4            int    `json:"Ban4"`
+	Ban4ID          int    `json:"Ban4Id"`
+	Ban5            int    `json:"Ban5"`
+	Ban5ID          int    `json:"Ban5Id"`
+	Ban6            int    `json:"Ban6"`
+	Ban6ID          int    `json:"Ban6Id"`
+	Creeps          int    `json:"Creeps"`
+	Damage          int    `json:"Damage"`
+	DamageBot       int    `json:"Damage_Bot"`
+	DamageMitigated int    `json:"Datamage_Mitigated"`
+	DamageStructure int    `json:"Damage_Structure"`
+	DamageTaken     int    `json:"Damage_Taken"`
+	Deaths          int    `json:"Deaths"`
+	God             string `json:"God"`
+	GodID           int    `json:"GodId"`
+	Gold            int    `json:"Gold"`
+	Healing         int    `json:"Healing"`
+	Itemid1         int    `json:"Itemid1"`
+	Itemid2         int    `json:"Itemid2"`
+	Itemid3         int    `json:"Itemid3"`
+	Itemid4         int    `json:"Itemid4"`
+	Itemid5         int    `json:"Itemid5"`
+	Itemid6         int    `json:"Itemid6"`
+	KillingSpree    int    `json:"Killing_Spree"`
+	Kills           int    `json:"Kills"`
+	Level           int    `json:"Level"`
+	Match           int    `json:"Match"`
+	MatchTime       string `json:"Match_Time"`
+	Minutes         int    `json:"Minutes"`
+	MultiKillMax    int    `json:"Multi_kill_max"`
+	Queue           string `json:"Queue"`
+	Skin            string `json:"Skin"`
+	Skinid          int    `json:"SkinId"`
+	Surrendered     string `json:"Surrendered"`
+	Team1score      int    `json:"Team1Score"`
+	Team2score      int    `json:"Team2Score"`
+	WinStatus       string `json:"Win_Status"`
+	Playername      string `json:"playerName"`
+	ReturnMessage   string `json:"ret_msg"`
+}
+
 // MatchPlayer is a struct that represents a player that participated in a Smite
 // match.
 type MatchPlayer struct {
@@ -139,6 +194,30 @@ func GetModeDetails(matchID string) ModeDetail {
 	}
 	modeDetail := ModeDetail{ReturnMessage: "Not found"}
 	return modeDetail
+}
+
+// GetMatchHistory returns a MatchHistory array instance loaded with each
+// match information for a player.
+func GetMatchHistory(playerName string) []MatchHistory {
+	hash := getMD5Hash(DevID + "getmatchhistory" + AuthKey + getTimestamp())
+	url := "http://api.smitegame.com/smiteapi.svc/getmatchhistoryJson/" + DevID + "/" + hash + "/" + SessionID + "/" + getTimestamp() + "/" + playerName
+
+	response, err := http.Get(url)
+	if err != nil {
+		perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			perror(err)
+		} else {
+			var matchHistory []MatchHistory
+			json.Unmarshal(contents, &matchHistory)
+			return matchHistory
+		}
+	}
+	matchHistory := []MatchHistory{}
+	return matchHistory
 }
 
 // GetMatchDetails returns a MatchPlayer array instance loaded with each
