@@ -8,35 +8,6 @@ import (
 	"time"
 )
 
-// Queue ID's
-// const (
-// 	Conquest5v5               = 423
-// 	Novice                    = 424
-// 	Conquest                  = 426
-// 	Practice                  = 427
-// 	Challenge                 = 429
-// 	Joust                     = 431
-// 	Domination                = 433
-// 	MatchOfTheDay             = 434
-// 	Arena                     = 435
-// 	ArenaChallenge            = 438
-// 	DominationChallenge       = 439
-// 	JoustQueued               = 440
-// 	RenaissanceJoustChallenge = 441
-// 	ConquestTeamRanked        = 442
-// 	RankedConquest            = 430
-// 	RankedJoust1v1            = 449
-// 	RankedJoust3v3            = 450
-// 	MasteryConquest           = 451
-// 	LeagueArena               = 451
-// 	LeagueConquest            = 452
-// 	LeagueBronze              = 1
-// 	LeagueSilver              = 2
-// 	LeagueGold                = 3
-// 	LeaguePlatinum            = 4
-// 	LeagueDiamond             = 5
-// )
-
 type MatchHistory struct {
 	Activeid1      int
 	Activeid2      int

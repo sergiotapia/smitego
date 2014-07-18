@@ -41,7 +41,7 @@ func main() {
   - [x] GetGodRecommendedItems
   - [x] GetItems
   - [x] GetMatchDetails
-  - [ ] GetMatchIdsByQueue
+  - [ ] GetMatchIdsByQueue - *note: Look into bug, is it on Hirez's side?*
   - [ ] GetLeagueLeaderBoard
   - [ ] GetLeagueSeasons
   - [ ] GetMatchHistory

@@ -6,6 +6,29 @@ import (
 	"net/http"
 )
 
+// These constants represent the various Queue IDs in the game.
+const (
+	Conquest5v5         = "423"
+	NoviceQueue         = "424"
+	Conquest            = "426"
+	Practice            = "427"
+	ConquestChallenge   = "429"
+	ConquestRanked      = "430"
+	Domination          = "433"
+	MatchOfTheDay       = "434"
+	Arena               = "435"
+	ArenaChallenge      = "438"
+	DominationChallenge = "439"
+	JoustLeague         = "440"
+	JoustChallenge      = "441"
+	ConquestTeamRanked  = "442"
+	Assault             = "445"
+	AssaultChallenge    = "446"
+	Joust3v3            = "448"
+	ConquestLeague      = "451"
+	ArenaLeague         = "452"
+)
+
 // MatchPlayer is a struct that represents a player that participated in a Smite
 // match.
 type MatchPlayer struct {
@@ -141,4 +164,25 @@ func GetMatchDetails(matchID string) []MatchPlayer {
 
 	matchDetail := []MatchPlayer{}
 	return matchDetail
+}
+
+// GetMatchIDsByQueue returns a JSON string of match IDs for a given queue on
+// a given date. Currently this API endpoint is not working well on HiRez's end.
+func GetMatchIDsByQueue(queue string, date string) string {
+	hash := getMD5Hash(DevID + "getmatchidsbyqueue" + AuthKey + getTimestamp())
+	url := "http://api.smitegame.com/smiteapi.svc/getmatchidsbyqueueJson/" + DevID + "/" + hash + "/" + SessionID + "/" + getTimestamp() + "/" + queue + "/" + date
+
+	response, err := http.Get(url)
+	if err != nil {
+		perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			perror(err)
+		} else {
+			return string(contents)
+		}
+	}
+	return ""
 }
