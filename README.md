@@ -41,9 +41,9 @@ func main() {
   - [x] GetGodRecommendedItems
   - [x] GetItems
   - [x] GetMatchDetails
-  - [ ] GetMatchIdsByQueue - *note: Look into bug, is it on Hirez's side?*
-  - [ ] GetLeagueLeaderBoard - *note: Look into bug, is it on Hirez's side?*
-  - [ ] GetLeagueSeasons
+  - [ ] GetMatchIdsByQueue - *Completed: Look into bug. Response is empty array. Is it on Hirez's side?*
+  - [ ] GetLeagueLeaderBoard - *Completed: Look into bug. Response is empty array. Is it on Hirez's side?*
+  - [ ] GetLeagueSeasons - *Completed: Look into bug. Response is empty array. Is it on Hirez's side?*
   - [ ] GetMatchHistory
   - [ ] GetPlayer
   - [ ] GetQueueStats

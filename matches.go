@@ -186,3 +186,24 @@ func GetMatchIDsByQueue(queue string, date string) string {
 	}
 	return ""
 }
+
+// GetLeagueSeasons returns a JSON string of league seasons for a given queue.
+// Currently this API endpoint is not working well on HiRez's end.
+func GetLeagueSeasons(queue string) string {
+	hash := getMD5Hash(DevID + "getleagueseasons" + AuthKey + getTimestamp())
+	url := "http://api.smitegame.com/smiteapi.svc/getleagueseasonsJson/" + DevID + "/" + hash + "/" + SessionID + "/" + getTimestamp() + "/" + queue
+
+	response, err := http.Get(url)
+	if err != nil {
+		perror(err)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			perror(err)
+		} else {
+			return string(contents)
+		}
+	}
+	return ""
+}
